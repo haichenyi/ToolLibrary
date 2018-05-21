@@ -153,17 +153,17 @@ public class MainActivity extends AppCompatActivity {
                         new ArrayMap<String, Object>(), new HttpCallback() {
                             @Override
                             public void onStart() {
-
+                                ToastUtils.showTipMsg("开始请求");
                             }
 
                             @Override
                             public void onSuccess(String success) {
-
+                                ToastUtils.showTipMsg("请求成功");
                             }
 
                             @Override
                             public void onError(String failed) {
-
+                                ToastUtils.showTipMsg("请求失败");
                             }
                         });
             }
