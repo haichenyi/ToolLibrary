@@ -49,6 +49,8 @@ import io.reactivex.annotations.NonNull;
  * @Version: V1.0
  */
 public final class LogUtils {
+    public static final String TAG_Wz = "wz";
+    public static final String TAG_Aloe = "aloe";
     private static final int V = Log.VERBOSE;
     private static final int D = Log.DEBUG;
     private static final int I = Log.INFO;
@@ -566,6 +568,10 @@ public final class LogUtils {
     private @interface Type {
     }
 
+    /**
+     * 是否需要日志
+     * @param isNeedLog true：需要。false：不需要
+     */
     public static void setIsNeedLog(boolean isNeedLog) {
         LogUtils.isNeedLog = isNeedLog;
     }
