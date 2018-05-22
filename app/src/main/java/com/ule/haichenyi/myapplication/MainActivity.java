@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.haichenyi.aloe.Interface.HttpCallback;
 import com.haichenyi.aloe.Interface.HttpsListener;
 import com.haichenyi.aloe.Interface.OnDismissListener;
 import com.haichenyi.aloe.Interface.PermissionListener;
+import com.haichenyi.aloe.tools.GlideUtils;
 import com.haichenyi.aloe.tools.LogUtils;
 import com.haichenyi.aloe.tools.NetworkUtils;
 import com.haichenyi.aloe.tools.OkHttpUtils;
@@ -177,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 LogUtils.i(LogUtils.TAG_Wz, DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()));
             }
         });
-
+        ImageView imageView = findViewById(R.id.img);
+        String url = "http://haichenyi.com/uploads/artistic_image/psb17.jpg";
+        GlideUtils.loadImg(this, url, imageView, true);
     }
 }
