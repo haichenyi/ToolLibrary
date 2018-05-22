@@ -24,28 +24,15 @@ public class GlideUtils {
     /**
      * 加载图片
      *
-     * @param activity  activity对象
      * @param url       图片url地址
      * @param imageView 需要显示图片的ImageView
      * @param isCircle  是否需要圆形显示。false：正常显示。true：圆形显示
      */
     @SuppressLint("CheckResult")
-    public static void loadImg(Activity activity, String url, ImageView imageView,
-                               boolean isCircle) {
+    public static void loadImg(String url, ImageView imageView, boolean isCircle) {
         if (options != null) {
             if (isCircle) options.circleCrop();
-            Glide.with(activity).load(url).apply(options).into(imageView);
-        } else {
-            throw new NullPointerException("options is null,Do you init before use?");
-        }
-    }
-
-    @SuppressLint("CheckResult")
-    public static void loadImg(Fragment fragment, String url, ImageView imageView,
-                               boolean isCircle) {
-        if (options != null) {
-            if (isCircle) options.circleCrop();
-            Glide.with(fragment).load(url).apply(options).into(imageView);
+            Glide.with(imageView.getContext()).load(url).apply(options).into(imageView);
         } else {
             throw new NullPointerException("options is null,Do you init before use?");
         }
@@ -54,30 +41,21 @@ public class GlideUtils {
     /**
      * 加载图片
      *
-     * @param activity       activity对象
      * @param url            图片url地址
      * @param imageView      需要显示图片的ImageView
      * @param requestOptions 加载图片方式
      * @param isCircle       是否需要圆形显示。false：正常显示。true：圆形显示
      */
     @SuppressLint("CheckResult")
-    public static void loadImg(Activity activity, String url, ImageView imageView,
-                               RequestOptions requestOptions, boolean isCircle) {
+    public static void loadImg(String url, ImageView imageView, RequestOptions requestOptions,
+                               boolean isCircle) {
         if (isCircle) requestOptions.circleCrop();
-        Glide.with(activity).load(url).apply(requestOptions).into(imageView);
-    }
-
-    @SuppressLint("CheckResult")
-    public static void loadImg(Fragment fragment, String url, ImageView imageView,
-                               RequestOptions requestOptions, boolean isCircle) {
-        if (isCircle) requestOptions.circleCrop();
-        Glide.with(fragment).load(url).apply(requestOptions).into(imageView);
+        Glide.with(imageView.getContext()).load(url).apply(requestOptions).into(imageView);
     }
 
     /**
      * 指定加载图片的宽高
      *
-     * @param activity  activity对象
      * @param url       图片url地址
      * @param imageView 需要显示图片的ImageView
      * @param isCircle  是否需要圆形显示。false：正常显示。true：圆形显示
@@ -85,26 +63,13 @@ public class GlideUtils {
      * @param height    需要显示图片的高。单位：dp
      */
     @SuppressLint("CheckResult")
-    public static void loadImg(Activity activity, String url, ImageView imageView, boolean isCircle,
-                               float width, float height) {
+    public static void loadImg(String url, ImageView imageView, boolean isCircle, float width,
+                               float height) {
         if (options != null) {
             options.override((int) ToolsUtils.digitValue(width, TypedValue.COMPLEX_UNIT_DIP),
                     (int) ToolsUtils.digitValue(height, TypedValue.COMPLEX_UNIT_DIP));
             if (isCircle) options.circleCrop();
-            Glide.with(activity).load(url).apply(options).into(imageView);
-        } else {
-            throw new NullPointerException("options is null,Do you init before use?");
-        }
-    }
-
-    @SuppressLint("CheckResult")
-    public static void loadImg(Fragment fragment, String url, ImageView imageView, boolean isCircle,
-                               float width, float height) {
-        if (options != null) {
-            options.override((int) ToolsUtils.digitValue(width, TypedValue.COMPLEX_UNIT_DIP),
-                    (int) ToolsUtils.digitValue(height, TypedValue.COMPLEX_UNIT_DIP));
-            if (isCircle) options.circleCrop();
-            Glide.with(fragment).load(url).apply(options).into(imageView);
+            Glide.with(imageView.getContext()).load(url).apply(options).into(imageView);
         } else {
             throw new NullPointerException("options is null,Do you init before use?");
         }
@@ -113,35 +78,21 @@ public class GlideUtils {
     /**
      * 加载gif图
      *
-     * @param activity   activity对象
      * @param resourceId 资源图片id
      * @param imageView  需要显示图片的ImageView
      */
-    public static void loadGif(Activity activity, @DrawableRes int resourceId,
-                               ImageView imageView) {
-        Glide.with(activity).asGif().load(resourceId).into(imageView);
-    }
-
-    public static void loadGif(Fragment fragment, @DrawableRes int resourceId,
-                               ImageView imageView) {
-        Glide.with(fragment).asGif().load(resourceId).into(imageView);
+    public static void loadGif(@DrawableRes int resourceId, ImageView imageView) {
+        Glide.with(imageView.getContext()).asGif().load(resourceId).into(imageView);
     }
 
     /**
      * 把gif图当成bitmap加载
      *
-     * @param activity   activity
      * @param resourceId 资源id
      * @param imageView  imageView
      */
-    public static void loadGifAsBitmap(Activity activity, @DrawableRes int resourceId,
-                                       ImageView imageView) {
-        Glide.with(activity).asBitmap().load(resourceId).into(imageView);
-    }
-
-    public static void loadGifAsBitmap(Fragment fragment, @DrawableRes int resourceId,
-                                       ImageView imageView) {
-        Glide.with(fragment).asBitmap().load(resourceId).into(imageView);
+    public static void loadGifAsBitmap(@DrawableRes int resourceId, ImageView imageView) {
+        Glide.with(imageView.getContext()).asBitmap().load(resourceId).into(imageView);
     }
 
     /**

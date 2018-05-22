@@ -2,6 +2,7 @@ package com.ule.haichenyi.myapplication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.util.ArrayMap;
@@ -179,8 +180,13 @@ public class MainActivity extends AppCompatActivity {
                 LogUtils.i(LogUtils.TAG_Wz, DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()));
             }
         });
-        ImageView imageView = findViewById(R.id.img);
-        String url = "http://haichenyi.com/uploads/artistic_image/psb17.jpg";
-        GlideUtils.loadImg(this, url, imageView, true);
+        findViewById(R.id.btn10).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ImageActivity.class));
+            }
+        });
+
+
     }
 }
