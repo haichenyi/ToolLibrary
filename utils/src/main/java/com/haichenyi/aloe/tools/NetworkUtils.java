@@ -173,10 +173,10 @@ public class NetworkUtils {
             NetworkInfo info = connectivityManager.getActiveNetworkInfo();
             if (info != null && info.isAvailable()) {
                 String name = info.getTypeName();
-                LogUtils.e(TAG, "MQTT当前网络名称：" + name);
+                LogUtils.e(TAG, "当前网络名称：" + name);
                 return true;
             } else {
-                LogUtils.e(TAG, "MQTT 没有可用网络");
+                LogUtils.e(TAG, "没有可用网络");
                 return false;
             }
         } else {
@@ -726,6 +726,14 @@ public class NetworkUtils {
         wifiManager.enableNetwork(network, true);
     }
 
+    /**
+     * 创建WifiConfiguration之后连接wifi
+     * @param wifiManager wifiManager
+     * @param ssid ssid 帐号
+     * @param pwd pwd 密码
+     * @param type wifi类型
+     * @return WifiConfiguration
+     */
     private static WifiConfiguration createWifiInfo(WifiManager wifiManager, String ssid, String pwd, int type) {
         WifiConfiguration wifiConfiguration = new WifiConfiguration();
         wifiConfiguration.allowedAuthAlgorithms.clear();

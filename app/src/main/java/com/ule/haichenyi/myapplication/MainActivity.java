@@ -7,7 +7,9 @@ import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
+
 import com.haichenyi.aloe.Interface.HttpCallback;
 import com.haichenyi.aloe.Interface.HttpsListener;
 import com.haichenyi.aloe.Interface.OnDismissListener;
@@ -168,5 +170,13 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+        findViewById(R.id.btn9).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.i(LogUtils.TAG_Wz, DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()));
+            }
+        });
+
     }
 }
