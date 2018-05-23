@@ -1,7 +1,5 @@
 package com.haichenyi.aloe.tools;
 
-import android.util.Log;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,7 +51,7 @@ public class ThreadManager {
      * @param runnable Runnable
      */
     public void execute(Runnable runnable) {
-        Log.e(TAG, "execute");
+        LogUtils.i(TAG, "execute");
         if (executorService != null) {
             executorService.execute(runnable);
         }

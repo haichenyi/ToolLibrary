@@ -1,8 +1,6 @@
 package com.haichenyi.aloe.tools;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Fragment;
 import android.support.annotation.DrawableRes;
 import android.util.TypedValue;
 import android.widget.ImageView;

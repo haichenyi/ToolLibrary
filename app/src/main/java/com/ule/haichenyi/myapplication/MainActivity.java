@@ -3,12 +3,15 @@ package com.ule.haichenyi.myapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,6 +21,7 @@ import com.haichenyi.aloe.Interface.OnDismissListener;
 import com.haichenyi.aloe.Interface.PermissionListener;
 import com.haichenyi.aloe.tools.GlideUtils;
 import com.haichenyi.aloe.tools.LogUtils;
+import com.haichenyi.aloe.tools.MemorySpaceUtils;
 import com.haichenyi.aloe.tools.NetworkUtils;
 import com.haichenyi.aloe.tools.OkHttpUtils;
 import com.haichenyi.aloe.tools.PermissionUtils;
@@ -25,6 +29,8 @@ import com.haichenyi.aloe.tools.ThreadManager;
 import com.haichenyi.aloe.tools.ToastUtils;
 import com.haichenyi.aloe.tools.ToolsHttpsConnection;
 import com.haichenyi.aloe.tools.ToolsUtils;
+
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -184,6 +190,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ImageActivity.class));
+            }
+        });
+
+        findViewById(R.id.btn11).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ThreadManager.getDefault().execute(new Runnable() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+                    @Override
+                    public void run() {
+                        try {
+                            String path = "http://haichenyi.com/uploads/artistic_image/psb17.jpg";
+                            LogUtils.i(LogUtils.TAG_Wz, Formatter.formatFileSize(MainActivity.this, MemorySpaceUtils.FileSize(path)));
+                            LogUtils.i(LogUtils.TAG_Wz, "手机可用外部存储空间："+MemorySpaceUtils.getAvailableExternalMemorySize());
+                            LogUtils.i(LogUtils.TAG_Wz, "手机可用内部存储空间："+MemorySpaceUtils.getAvailableInternalMemorySize());
+                            LogUtils.i(LogUtils.TAG_Wz, "手机内部存储空间："+MemorySpaceUtils.getExternalMemorySize());
+                            LogUtils.i(LogUtils.TAG_Wz, "手机内部存储空间："+MemorySpaceUtils.getInternalMemorySize());
+                            LogUtils.i(LogUtils.TAG_Wz, "手机SD卡是否可用："+MemorySpaceUtils.isExternalStorageAvailable());
+                            LogUtils.i(LogUtils.TAG_Wz, "getCacheDir()目录的可用空间："+MemorySpaceUtils.getFileMemorySize(getCacheDir()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            LogUtils.i(LogUtils.TAG_Wz, e.getMessage());
+                        }
+
+                    }
+                });
             }
         });
 

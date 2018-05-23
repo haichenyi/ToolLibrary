@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,12 +69,27 @@ public class ToolsUtils {
 
     /**
      * 截取浮点数
+     *
      * @param aFloat 需要截取的数
-     * @param num 小数点后面保留几位
+     * @param num    小数点后面保留几位
      * @return 截取后的数
      */
-    public static Float getFloat(Float aFloat,int num) {
+    public static Float getFloat(Float aFloat, int num) {
 
         return new BigDecimal(aFloat).setScale(num, BigDecimal.ROUND_HALF_UP).floatValue();
     }
+
+    /**
+     * APP下载成功之后跳转安装界面
+     *
+     * @param context  context
+     * @param filePath app存储路径
+     */
+    public static void startInstall(Context context, String filePath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(new File(filePath)),
+                "application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
+
 }
