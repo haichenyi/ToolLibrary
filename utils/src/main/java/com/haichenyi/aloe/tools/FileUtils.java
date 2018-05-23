@@ -1,7 +1,6 @@
 package com.haichenyi.aloe.tools;
 
 import android.content.Context;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
