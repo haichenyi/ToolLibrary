@@ -1,6 +1,7 @@
 package com.haichenyi.aloe.tools;
 
 import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,7 +34,12 @@ public class FileUtils {
      */
     @SuppressWarnings("all")
     public static File createFileDirs(String path, String name) {
-        File file = new File(path + "/" + name);
+        return createFileDirs(path + "/" + name);
+    }
+
+    @SuppressWarnings("all")
+    public static File createFileDirs(String dirPath) {
+        File file = new File(dirPath);
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -41,7 +47,7 @@ public class FileUtils {
     }
 
     /**
-     * 在path目录下面新建一个名称为name的文件.
+     * 在path目录下面新建一个名称为name的文件,存在就会删除.
      *
      * @param path 目录
      * @param name 名称（包括文件后缀）

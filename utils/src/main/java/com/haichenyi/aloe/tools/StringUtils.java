@@ -1,5 +1,6 @@
 package com.haichenyi.aloe.tools;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 /**
@@ -66,4 +67,13 @@ public class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * @param url 下载链接
+     * @return 文件名
+     * 从下载连接中解析出文件名
+     */
+    @NonNull
+    public static String getNameFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
 }

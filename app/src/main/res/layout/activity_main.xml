@@ -73,10 +73,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="filesize" />
+
         <Button
             android:id="@+id/btn12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="createfile" />
+
+        <Button
+            android:id="@+id/btn13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="downloadfile" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

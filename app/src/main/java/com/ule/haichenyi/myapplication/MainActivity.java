@@ -16,6 +16,7 @@ import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.haichenyi.aloe.Interface.DownloadListener;
 import com.haichenyi.aloe.Interface.HttpCallback;
 import com.haichenyi.aloe.Interface.HttpsListener;
 import com.haichenyi.aloe.Interface.OnDismissListener;
@@ -235,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
                                 File newFile = FileUtils.createNewFile(ule.getAbsolutePath(), "HelloWorld.txt");
                                 FileUtils.writeFile(newFile.getAbsolutePath(), "this is a text!");
                                 String s = FileUtils.readFile(newFile.getAbsolutePath());
-                                LogUtils.i(LogUtils.TAG_Wz, "写入的消息为："+s);
+                                LogUtils.i(LogUtils.TAG_Wz, "写入的消息为：" + s);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -251,6 +252,30 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        });
+
+        findViewById(R.id.btn13).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String path = "http://haichenyi.com/uploads/artistic_image/psb17.jpg";
+                OkHttpUtils.getInstance().downLoad(path, getCacheDir().getAbsolutePath(), "", new DownloadListener() {
+                    @Override
+                    public void onFailed(Exception e) {
+                        LogUtils.i(LogUtils.TAG_Wz, e.getMessage());
+                    }
+
+                    @Override
+                    public void onProgress(long current, long total, int progress) {
+                        LogUtils.i(LogUtils.TAG_Wz, current + "/" + total + "=" + progress);
+                    }
+
+                    @Override
+                    public void onSuccess(String filePath) {
+                        ToastUtils.showTipMsg(filePath);
+                        LogUtils.i(LogUtils.TAG_Wz, filePath);
+                    }
+                });
             }
         });
     }
