@@ -35,6 +35,7 @@ import com.haichenyi.aloe.tools.ToolsUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -274,6 +275,37 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(String filePath) {
                         ToastUtils.showTipMsg(filePath);
                         LogUtils.i(LogUtils.TAG_Wz, filePath);
+                    }
+                });
+            }
+        });
+        findViewById(R.id.btn14).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ThreadManager.getDefault().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String path = getFilesDir().getAbsolutePath();
+                        LogUtils.i(LogUtils.TAG_Wz, "path:" + path);
+                        String name = "sanhuo";
+                        String fileName = "sanhuo.zip";
+                        LogUtils.i(LogUtils.TAG_Wz, !FileUtils.isNoEmpty(path, name));
+                        if (!FileUtils.isNoEmpty(path, name)) {
+                            try {
+                                InputStream inputStream = getAssets().open(fileName);
+                                LogUtils.i(LogUtils.TAG_Wz, inputStream != null);
+                                if (inputStream != null) {
+                                    File file = FileUtils.createFileDirs(path, name);
+                                    FileUtils.Unzip(inputStream, file.getAbsolutePath());
+                                } else {
+
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            //sanhuo文件夹存在，并且长度不为0
+                        }
                     }
                 });
             }

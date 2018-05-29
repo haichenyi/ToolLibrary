@@ -1,7 +1,10 @@
 package com.haichenyi.aloe.tools;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,8 +13,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * @Title: FileUtils
@@ -34,7 +43,7 @@ public class FileUtils {
      */
     @SuppressWarnings("all")
     public static File createFileDirs(String path, String name) {
-        return createFileDirs(path + "/" + name);
+        return createFileDirs(path + File.separator + name);
     }
 
     @SuppressWarnings("all")
@@ -55,7 +64,7 @@ public class FileUtils {
      */
     @SuppressWarnings("all")
     public static File createNewFile(String path, String name) throws IOException {
-        File file = new File(path + "/" + name);
+        File file = new File(path + File.separator + name);
         if (file.exists()) {
             file.delete();
         }
@@ -233,4 +242,88 @@ public class FileUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * 判断文件是否为空，文件不存在即为空
+     *
+     * @param path 目录
+     * @param name 文件名称
+     * @return boolean
+     */
+    public static boolean isNoEmpty(String path, String name) {
+        return isNoEmpty(path + File.separator + name);
+    }
+
+    public static boolean isNoEmpty(String pathAndName) {
+        File file = new File(pathAndName);
+        return file.exists() && file.length() != 0;
+    }
+
+    /**
+     * 判断文件是否存在
+     *
+     * @param path 目录
+     * @param name 文件名称
+     * @return boolean
+     */
+    public static boolean isExit(String path, String name) {
+        return isExit(path + File.separator + name);
+    }
+
+    public static boolean isExit(String pathAndName) {
+        return new File(pathAndName).exists();
+    }
+
+    /**
+     * 解压zip文件
+     *
+     * @param zipFile   需要解压的zip文件路径
+     * @param targetDir 需要解压到的目标文件夹
+     */
+    public static void Unzip(String zipFile, String targetDir) {
+        try {
+            FileInputStream fis = new FileInputStream(zipFile);
+            Unzip(fis, targetDir);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void Unzip(InputStream inputStream, String targetDir) {
+        int BUFFER = 4096; //这里缓冲区我们使用4KB，
+        String strEntry; //保存每个zip的条目名称
+        try {
+            BufferedOutputStream dest = null; //缓冲输出流
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(inputStream));
+            ZipEntry entry; //每个zip条目的实例
+            while ((entry = zis.getNextEntry()) != null) {
+                try {
+                    int count;
+                    byte data[] = new byte[BUFFER];
+                    strEntry = entry.getName();
+                    File entryFile = new File(targetDir + File.separator + strEntry);
+                    if (entryFile.isFile() && !entryFile.exists()) {
+                        entryFile.createNewFile();
+                    }
+                    File entryDir = new File(entryFile.getParent());
+                    if (entryDir.isDirectory() && !entryDir.exists()) {
+                        entryDir.mkdirs();
+                    }
+                    FileOutputStream fos = new FileOutputStream(entryFile);
+                    dest = new BufferedOutputStream(fos, BUFFER);
+                    while ((count = zis.read(data, 0, BUFFER)) != -1) {
+                        dest.write(data, 0, count);
+                    }
+                    dest.flush();
+                    dest.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            zis.close();
+        } catch (Exception cwj) {
+            cwj.printStackTrace();
+        }
+    }
+
 }

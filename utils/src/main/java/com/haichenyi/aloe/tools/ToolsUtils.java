@@ -34,13 +34,13 @@ public class ToolsUtils {
     }
 
     /**
-     * 判断手机号是否合法.
+     * 判断是否满足某个正则表达式
      *
-     * @param number  需要判断的手机号
-     * @param regular 正则表达式："^(1(3|5|8)\\d{9})|(14(5|7)\\d{8})|(17([^2|4|9)])\\d{8})$"
-     * @return true是合法的手机号, false不是合法的手机号
+     * @param number  需要判断的字符串
+     * @param regular 正则表达式：判断是否是手机号："^(1(3|5|8)\\d{9})|(14(5|7)\\d{8})|(17([^2|4|9)])\\d{8})$"
+     * @return true是满足, false不满足
      */
-    public static boolean isPhone(String number, String regular) {
+    public static boolean isRegular(String number, String regular) {
         Pattern p = Pattern.compile(regular);
         Matcher m = p.matcher(number);
         return m.matches();
