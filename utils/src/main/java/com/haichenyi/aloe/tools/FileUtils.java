@@ -326,4 +326,61 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 文件夹拷贝
+     *
+     * @param fromFile 需要拷贝的文件夹
+     * @param toFile   目标文件夹
+     * @return int 0：正常 -1：异常
+     */
+    public static int copyFileDirs(String fromFile, String toFile) {
+        //要复制的文件目录
+        File[] currentFiles;
+        File root = new File(fromFile);
+        //如同判断SD卡是否存在或者文件是否存在
+        //如果不存在则 return出去
+        if (!root.exists()) {
+            return -1;
+        }
+        //如果存在则获取当前目录下的全部文件 填充数组
+        currentFiles = root.listFiles();
+
+        //创建目标目录
+        createFileDirs(toFile);
+        //遍历要复制该目录下的全部文件
+        for (File currentFile : currentFiles) {
+            //如果当前项为子目录 进行递归
+            if (currentFile.isDirectory()) {
+                copyFileDirs(currentFile.getPath() + File.separator, toFile + currentFile.getName() + File.separator);
+            } else {
+                //如果当前项为文件则进行文件拷贝
+                CopySdcardFile(currentFile.getPath(), toFile + currentFile.getName());
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 文件拷贝,要复制的目录下的所有非子目录(文件夹)文件拷贝
+     *
+     * @param fromFile 需要复制的文件（带文件名称）
+     * @param toFile   目标文件（带文件名称）
+     * @return int 0：正常 -1：异常
+     */
+    public static int CopySdcardFile(String fromFile, String toFile) {
+        try {
+            InputStream inputStream = new FileInputStream(fromFile);
+            OutputStream outputStream = new FileOutputStream(toFile);
+            byte bt[] = new byte[1024];
+            int c;
+            while ((c = inputStream.read(bt)) > 0) {
+                outputStream.write(bt, 0, c);
+            }
+            inputStream.close();
+            outputStream.close();
+            return 0;
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
 }
