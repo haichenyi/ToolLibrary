@@ -93,5 +93,8 @@ ToastUtils.init(this);
 
     内部包含多个方法，如：根据资源名称获取资源id，跳转app安装界面等等
 
+### 16、UiUtils Ui工具类
 
+    内部包含多个方法，如：设置dialog的宽高，设置popup的背景颜色等等
+    
 ***PS：以上类中方法的调用方式，demo里面都有示例。***

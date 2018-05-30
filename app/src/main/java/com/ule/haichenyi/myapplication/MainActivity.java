@@ -3,6 +3,7 @@ package com.ule.haichenyi.myapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -11,16 +12,23 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.haichenyi.aloe.Interface.BottomClickListener;
 import com.haichenyi.aloe.Interface.DownloadListener;
 import com.haichenyi.aloe.Interface.HttpCallback;
 import com.haichenyi.aloe.Interface.HttpsListener;
 import com.haichenyi.aloe.Interface.OnDismissListener;
 import com.haichenyi.aloe.Interface.PermissionListener;
+import com.haichenyi.aloe.impl.BottomListener;
+import com.haichenyi.aloe.impl.RecycleViewDivider;
 import com.haichenyi.aloe.tools.FileUtils;
 import com.haichenyi.aloe.tools.GlideUtils;
 import com.haichenyi.aloe.tools.LogUtils;
@@ -32,10 +40,14 @@ import com.haichenyi.aloe.tools.ThreadManager;
 import com.haichenyi.aloe.tools.ToastUtils;
 import com.haichenyi.aloe.tools.ToolsHttpsConnection;
 import com.haichenyi.aloe.tools.ToolsUtils;
+import com.haichenyi.aloe.tools.UiUtils;
+import com.ule.haichenyi.myapplication.bean.BottomBean;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -305,6 +317,39 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {
                             //sanhuo文件夹存在，并且长度不为0
+                        }
+                    }
+                });
+            }
+        });
+
+        findViewById(R.id.btn15).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<BottomBean> data = new ArrayList<>();
+                for (int i = 0; i < 15; i++) {
+                    data.add(new BottomBean().setLeft("第" + i + "栏左边item").setRight("第" + i + "栏右边item"));
+                }
+                BaseQuickAdapter<BottomBean, BaseViewHolder> adapter = new BaseQuickAdapter<BottomBean, BaseViewHolder>(R.layout.item_bottom, data) {
+                    @Override
+                    protected void convert(BaseViewHolder helper, BottomBean item) {
+                        helper.setText(R.id.tv_content_left, item.left);
+                        helper.setText(R.id.tv_content_right, item.right);
+                        helper.addOnClickListener(R.id.tv_content_left)
+                                .addOnClickListener(R.id.tv_content_right);
+                    }
+                };
+                RecycleViewDivider divider = new RecycleViewDivider(MainActivity.this, LinearLayoutManager.HORIZONTAL, 1, Color.BLACK);
+                UiUtils.showBottomDialog(MainActivity.this, divider, adapter, new BottomListener() {
+                    @Override
+                    public void onItemChildClickListener(BaseQuickAdapter adapter, View view, int position) {
+                        switch (view.getId()) {
+                            case R.id.tv_content_left:
+                                ToastUtils.showTipMsg("第" + position + "栏左边item");
+                                break;
+                            case R.id.tv_content_right:
+                                ToastUtils.showTipMsg("第" + position + "栏右边item");
+                                break;
                         }
                     }
                 });

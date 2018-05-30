@@ -47,7 +47,7 @@ public class ToolsUtils {
     }
 
     /**
-     * 返回你需要的值：这里你传20，单位你传dp，返回值就是你这个手机对应的20dp
+     * 返回你需要的值：如：这里你传20，单位你传dp，返回值就是你这个手机对应的20dp
      *
      * @param value 数据
      * @param unit  单位：dp为{@link TypedValue#COMPLEX_UNIT_DIP},
@@ -92,4 +92,20 @@ public class ToolsUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * 拨打电话<uses-permission android:name="android.permission.CALL_PHONE" />
+     * 直接拨打电话：Intent.ACTION_CALL
+     * 跳转拨号界面：Intent.ACTION_DIAL
+     *
+     * @param context  context
+     * @param type     type:{@link Intent#ACTION_CALL},
+     *                 {@link Intent#ACTION_DIAL}
+     * @param phoneNum 电话号码
+     */
+    public static void callPhone(Context context, String type, String phoneNum) {
+        Intent intent = new Intent(type);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        context.startActivity(intent);
+    }
 }

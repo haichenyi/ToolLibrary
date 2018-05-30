@@ -91,5 +91,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="unZipfile" />
+        <Button
+            android:id="@+id/btn15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bottomdialog" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
