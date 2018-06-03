@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LogUtils.v("wz", "打印日志v");
         LogUtils.i("wz", "打印日志i");
-        LogUtils.d("wz", "打印日志d");
         LogUtils.e("wz", "打印日志e");
         findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
             @Override
