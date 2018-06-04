@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.v("wz", "打印日志v");
         LogUtils.i("wz", "打印日志i");
         LogUtils.e("wz", "打印日志e");
+        String name = "123rewf fdfdasf fdsfdsvc bvcbvc qwe";
+        LogUtils.i(LogUtils.TAG_Wz,name);
+        name.replace(" ",";");
+        LogUtils.i(LogUtils.TAG_Wz,name);
         //1、必须要有activity
         new Activity().runOnUiThread(new Runnable() {
             @Override
