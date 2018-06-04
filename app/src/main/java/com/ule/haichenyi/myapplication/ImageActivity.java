@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.haichenyi.aloe.tools.GlideUtils;
 
@@ -37,5 +38,7 @@ public class ImageActivity extends AppCompatActivity{
         ImageView img6 = findViewById(R.id.img6);
         String url6 = "https://upload-images.jianshu.io/upload_images/7041675-bdc96f1dee8ba801.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
         GlideUtils.loadImg(url6, img6, true);
+        TextView textView = null;
+        textView.setText("");
     }
 }

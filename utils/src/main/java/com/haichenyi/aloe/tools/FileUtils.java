@@ -73,6 +73,22 @@ public class FileUtils {
     }
 
     /**
+     * 在path目录下面创建一个名称为name的文件，不存在才会创建.
+     *
+     * @param path 目录
+     * @param name 名称（包括文件后缀）
+     * @return File
+     */
+    @SuppressWarnings("all")
+    public static File createFile(String path, String name) throws IOException {
+        File file = new File(path + File.separator + name);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        return file;
+    }
+
+    /**
      * 删除文件夹下的所有内容.
      *
      * @param path 文件夹路径
@@ -156,14 +172,14 @@ public class FileUtils {
     /**
      * 以追加的方式写文件（任意路径）.
      *
-     * @param filePath 文件路径
-     * @param msg      内容
+     * @param file 文件
+     * @param msg  内容
      */
-    public static void writeFileAppend(String filePath, String msg) {
+    public static void writeFileAppend(File file, String msg) {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(new File(filePath), true)));
+                    new FileOutputStream(file, true)));
             bw.write(msg);
         } catch (Exception e) {
             e.printStackTrace();

@@ -18,6 +18,7 @@ import android.text.format.DateFormat;
 import android.text.format.Formatter;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -29,6 +30,7 @@ import com.haichenyi.aloe.Interface.OnDismissListener;
 import com.haichenyi.aloe.Interface.PermissionListener;
 import com.haichenyi.aloe.impl.BottomListener;
 import com.haichenyi.aloe.impl.RecycleViewDivider;
+import com.haichenyi.aloe.tools.CrashHandler;
 import com.haichenyi.aloe.tools.FileUtils;
 import com.haichenyi.aloe.tools.GlideUtils;
 import com.haichenyi.aloe.tools.LogUtils;
@@ -59,15 +61,30 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.v("wz", "打印日志v");
         LogUtils.i("wz", "打印日志i");
         LogUtils.e("wz", "打印日志e");
-        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
+        //1、必须要有activity
+        new Activity().runOnUiThread(new Runnable() {
             @Override
-            public void onClick(View view) {
-                ToastUtils.showTipMsg("测试Toast类");
+            public void run() {
+                ToastUtils.showTipMsg("主线程回调");
             }
         });
-        findViewById(R.id.btn2).setOnClickListener(new View.OnClickListener() {
+        //2、
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
             @Override
-            public void onClick(View view) {
+            public void run() {
+                ToastUtils.showTipMsg("主线程回调");
+            }
+        });
+    }
+
+    @SuppressWarnings("unused")
+    public void onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn1:
+                ToastUtils.showTipMsg("测试Toast类");
+                break;
+            case R.id.btn2:
                 PermissionUtils.requestPermission(MainActivity.this, new PermissionListener() {
                     @Override
                     public void onResult(boolean hasPermission) {
@@ -86,44 +103,32 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.VIBRATE);
-            }
-        });
-        findViewById(R.id.btn3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn3:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @Override
                     public void run() {
-                        LogUtils.e("wz", "ThreadManager");
+                        LogUtils.e(LogUtils.TAG_Wz, "ThreadManager");
                     }
                 });
-            }
-        });
-        findViewById(R.id.btn4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn4:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @Override
                     public void run() {
                         ToastUtils.showTipMsg("网络是否可用：" + NetworkUtils.isConnectIsNormal(MainActivity.this));
                     }
                 });
-            }
-        });
-        findViewById(R.id.btn5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn5:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @Override
                     public void run() {
                         ToolsUtils.startSetting(MainActivity.this);
                     }
                 });
-            }
-        });
-        findViewById(R.id.btn6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn6:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -148,33 +153,11 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 });
-            }
-        });
-        findViewById(R.id.btn7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn7:
                 LogUtils.e(ToolsUtils.getFloat(432.123674324F, 3));
-            }
-        });
-
-        //1、必须要有activity
-        new Activity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ToastUtils.showTipMsg("主线程回调");
-            }
-        });
-        //2、
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                ToastUtils.showTipMsg("主线程回调");
-            }
-        });
-        findViewById(R.id.btn8).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.btn8:
                 String url = "";
                 OkHttpUtils.getInstance().post(url, new ArrayMap<String, Object>(),
                         new ArrayMap<String, Object>(), new HttpCallback() {
@@ -193,26 +176,14 @@ public class MainActivity extends AppCompatActivity {
                                 ToastUtils.showTipMsg("请求失败");
                             }
                         });
-            }
-        });
-
-        findViewById(R.id.btn9).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn9:
                 LogUtils.i(LogUtils.TAG_Wz, DateFormat.format("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()));
-            }
-        });
-        findViewById(R.id.btn10).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn10:
                 startActivity(new Intent(MainActivity.this, ImageActivity.class));
-            }
-        });
-
-        findViewById(R.id.btn11).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                break;
+            case R.id.btn11:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
                     @Override
@@ -233,12 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-            }
-        });
-
-        findViewById(R.id.btn12).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn12:
                 PermissionUtils.requestPermission(MainActivity.this, new PermissionListener() {
                     @Override
                     public void onResult(boolean hasPermission) {
@@ -264,12 +231,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-        });
-
-        findViewById(R.id.btn13).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn13:
                 String path = "http://haichenyi.com/uploads/artistic_image/psb17.jpg";
                 OkHttpUtils.getInstance().downLoad(path, getCacheDir().getAbsolutePath(), "", new DownloadListener() {
                     @Override
@@ -288,11 +251,8 @@ public class MainActivity extends AppCompatActivity {
                         LogUtils.i(LogUtils.TAG_Wz, filePath);
                     }
                 });
-            }
-        });
-        findViewById(R.id.btn14).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn14:
                 ThreadManager.getDefault().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -319,12 +279,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-            }
-        });
-
-        findViewById(R.id.btn15).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn15:
                 List<BottomBean> data = new ArrayList<>();
                 for (int i = 0; i < 15; i++) {
                     data.add(new BottomBean().setLeft("第" + i + "栏左边item").setRight("第" + i + "栏右边item"));
@@ -352,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-            }
-        });
+                break;
+        }
     }
 }

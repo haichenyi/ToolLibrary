@@ -10,91 +10,77 @@
 
         <Button
             android:id="@+id/btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Toast" />
+            style="@style/BtnStyle"
+            android:text="吐司" />
 
         <Button
             android:id="@+id/btn2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="permission" />
+            style="@style/BtnStyle"
+            android:text="权限获取" />
 
         <Button
             android:id="@+id/btn3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thread" />
+            style="@style/BtnStyle"
+            android:text="线程" />
 
         <Button
             android:id="@+id/btn4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NetWork" />
+            style="@style/BtnStyle"
+            android:text="检测网络" />
 
         <Button
             android:id="@+id/btn5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="setting" />
+            style="@style/BtnStyle"
+            android:text="设置页面" />
 
         <Button
             android:id="@+id/btn6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/BtnStyle"
             android:text="https" />
 
         <Button
             android:id="@+id/btn7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="getFloat" />
+            style="@style/BtnStyle"
+            android:text="获取浮点数" />
 
         <Button
             android:id="@+id/btn8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/BtnStyle"
             android:text="okHttp" />
 
         <Button
             android:id="@+id/btn9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="getDate" />
+            style="@style/BtnStyle"
+            android:text="格式化时间" />
 
         <Button
             android:id="@+id/btn10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="button" />
+            style="@style/BtnStyle"
+            android:text="图片显示" />
 
         <Button
             android:id="@+id/btn11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="filesize" />
+            style="@style/BtnStyle"
+            android:text="手机存储" />
 
         <Button
             android:id="@+id/btn12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="createfile" />
+            style="@style/BtnStyle"
+            android:text="创建文件" />
 
         <Button
             android:id="@+id/btn13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="downloadfile" />
+            style="@style/BtnStyle"
+            android:text="下载文件" />
 
         <Button
             android:id="@+id/btn14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="unZipfile" />
+            style="@style/BtnStyle"
+            android:text="解压zip文件" />
+
         <Button
             android:id="@+id/btn15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="bottomdialog" />
+            style="@style/BtnStyle"
+            android:text="底部dialog" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
