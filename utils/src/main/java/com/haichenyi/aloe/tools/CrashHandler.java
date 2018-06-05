@@ -24,7 +24,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     //文件名
     private static final String FILE_NAME = "crash";
     //文件名后缀
-    private static final String FILE_NAME_SUFFIX = ".txt";
+    private static final String FILE_NAME_SUFFIX = ".trace";
     //上下文
     private Context mContext;
 
@@ -118,30 +118,21 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(fileTemp)));
             //导出手机信息和异常信息
             PackageInfo pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
-            FileUtils.writeFileAppend(file, "发生异常时间：" + DateUtils.getDate("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "应用版本：" + pi.versionName + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "应用版本号：" + pi.versionCode + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "android版本号：" + Build.VERSION.RELEASE + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "android版本号API：" + Build.VERSION.SDK_INT + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "手机制造商:" + Build.MANUFACTURER + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "手机型号：" + Build.MODEL + "\t");
-            FileUtils.writeFileAppend(file, "\n");
+            FileUtils.writeFileAppend(file, "发生异常时间：" + DateUtils.getDate("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + "\t\n");
+            FileUtils.writeFileAppend(file, "应用版本：" + pi.versionName + "\t\n");
+            FileUtils.writeFileAppend(file, "应用版本号：" + pi.versionCode + "\t\n");
+            FileUtils.writeFileAppend(file, "android版本号：" + Build.VERSION.RELEASE + "\t\n");
+            FileUtils.writeFileAppend(file, "android版本号API：" + Build.VERSION.SDK_INT + "\t\n");
+            FileUtils.writeFileAppend(file, "手机制造商:" + Build.MANUFACTURER + "\t\n");
+            FileUtils.writeFileAppend(file, "手机型号：" + Build.MODEL + "\t\n");
             ex.printStackTrace(pw);
             ex.printStackTrace();
             //关闭输出流
             pw.close();
             FileUtils.writeFileAppend(file, "异常：" + FileUtils.readFile(fileTemp.getAbsolutePath())
                     .replace("\t", "\n\t")
-                    .replace("Caused by", "\n\tCaused by") + "\t");
-            FileUtils.writeFileAppend(file, "\n");
-            FileUtils.writeFileAppend(file, "************************************************************\t");
-            FileUtils.writeFileAppend(file, "\n");
+                    .replace("Caused by", "\n\tCaused by") + "\t\n");
+            FileUtils.writeFileAppend(file, "************************************************************\t\n");
             fileTemp.delete();
             LogUtils.i(LogUtils.TAG_Wz, FileUtils.readFile(file.getAbsolutePath()));
         } catch (Exception e) {

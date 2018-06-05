@@ -26,9 +26,13 @@ import java.io.PrintWriter;
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
     //文件名
-    private static final String FILE_NAME = "log";
+    public static final String FILE_NAME = "log";
+    //文件名称中间的时间格式
+    public static final String FILE_NAME_TIME = "yyyy-MM-dd";
     //文件名后缀
-    private static final String FILE_NAME_SUFFIX = ".txt";
+    public static final String FILE_NAME_SUFFIX = ".txt";
+    //一条crash结束的标记
+    public static final String CRASH_END_FLAG = "************************************************************";
     //上下文
     private Context mContext;
 
@@ -71,7 +75,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         } else {
             FOLDER_PATH = folderPath;
         }
-        if (!StringUtils.isEmpty(folderPath)) {
+        if (!StringUtils.isEmpty(folderName)) {
             FOLDER_NAME = folderName;
         }
         return this;
@@ -115,7 +119,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         String savePath = FileUtils.createFileDirs(FOLDER_PATH, FOLDER_NAME).getAbsolutePath();
         try {
             //以当前时间创建log文件
-            String fileLogName = FILE_NAME + DateUtils.getDate("yyyy-MM-dd", System.currentTimeMillis()) + FILE_NAME_SUFFIX;
+            String fileLogName = FILE_NAME + DateUtils.getDate(FILE_NAME_TIME, System.currentTimeMillis()) + FILE_NAME_SUFFIX;
             String contentBefore = "";
             //之前有文件
             if (FileUtils.isNoEmpty(savePath, fileLogName)) {
@@ -126,6 +130,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             String temp = "temp.txt";
             File fileTemp = FileUtils.createNewFile(savePath, temp);
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(fileTemp)));
+
             //导出手机信息和异常信息
             PackageInfo pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
             FileUtils.writeFileAppend(file, "发生异常时间：" + DateUtils.getDate("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + "\t\n");
@@ -142,7 +147,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             FileUtils.writeFileAppend(file, "异常：" + FileUtils.readFile(fileTemp.getAbsolutePath())
                     .replace("\t", "\n\t")
                     .replace("Caused by", "\n\tCaused by") + "\t\n");
-            FileUtils.writeFileAppend(file, "************************************************************\t\n");
+            FileUtils.writeFileAppend(file, CRASH_END_FLAG + "\t\n");
             FileUtils.writeFileAppend(file, contentBefore);
             fileTemp.delete();
             LogUtils.i(LogUtils.TAG_Wz, FileUtils.readFile(file.getAbsolutePath()));
