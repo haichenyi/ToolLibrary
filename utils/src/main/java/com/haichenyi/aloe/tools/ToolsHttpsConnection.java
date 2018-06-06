@@ -33,8 +33,12 @@ import javax.net.ssl.X509TrustManager;
  * @Date: 2018/5/18
  * @Version: V1.0
  */
-public class ToolsHttpsConnection {
+public final class ToolsHttpsConnection {
     private static final String TAG = "ToolsHttpsConnection";
+
+    private ToolsHttpsConnection() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
 
     /**
      * post请求，记得新开线程
@@ -45,7 +49,8 @@ public class ToolsHttpsConnection {
      * @param params   参数
      * @param listener 回调监听HttpsListener
      */
-    public static void post(Activity activity, String path, String token, ArrayMap<String, String> params, final HttpsListener listener) {
+    public static void post(final Activity activity, final String path, final String token,
+                            final ArrayMap<String, String> params, final HttpsListener listener) {
         HttpsURLConnection connection = null;
         try {
             URL url = new URL(path);
@@ -110,9 +115,9 @@ public class ToolsHttpsConnection {
      * @return StringBuilder.toString()
      * @throws IOException IOException
      */
-    private static String readStream(InputStream inputStream) throws IOException {
+    private static String readStream(final InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = null;
+        String line;
         StringBuilder sb = new StringBuilder();
         while ((line = reader.readLine()) != null) {
             sb.append(line);
@@ -128,7 +133,8 @@ public class ToolsHttpsConnection {
      * @return String
      * @throws UnsupportedEncodingException UnsupportedEncodingException
      */
-    private static String parseParams(ArrayMap<String, String> params) throws UnsupportedEncodingException {
+    private static String parseParams(final ArrayMap<String, String> params)
+            throws UnsupportedEncodingException {
         StringBuilder stringBuilder = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             stringBuilder.append(URLEncoder.encode(entry.getKey(), "utf-8"));
@@ -150,7 +156,8 @@ public class ToolsHttpsConnection {
      * @throws NoSuchAlgorithmException NoSuchAlgorithmException
      * @throws KeyManagementException   KeyManagementException
      */
-    private static SSLSocketFactory createSSL() throws NoSuchAlgorithmException, KeyManagementException {
+    private static SSLSocketFactory createSSL()
+            throws NoSuchAlgorithmException, KeyManagementException {
         TrustManager[] tm = new TrustManager[]{myX509TrustManager};
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, tm, null);

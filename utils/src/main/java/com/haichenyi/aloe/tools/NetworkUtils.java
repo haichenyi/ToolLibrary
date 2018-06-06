@@ -60,6 +60,10 @@ public class NetworkUtils {
     private static final String CONNECT_TYPE_UNI3GNET = "3gnet";
     private static final Uri PREFERRED_APN_URI = Uri.parse("content://telephony/carriers/preferapn");
 
+    private NetworkUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /*
      *
      * 获取网络类型.

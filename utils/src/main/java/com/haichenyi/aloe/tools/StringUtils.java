@@ -10,14 +10,19 @@ import android.text.TextUtils;
  * @Date: 2018/5/18
  * @Version: V1.0
  */
-public class StringUtils {
+public final class StringUtils {
+
+    private StringUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 判断字符串是否为空
      *
      * @param str str
      * @return boolean
      */
-    public static boolean isEmpty(String str) {
+    public static boolean isEmpty(final String str) {
         return TextUtils.isEmpty(str);
     }
 
@@ -28,7 +33,7 @@ public class StringUtils {
      * @param str2 str2
      * @return boolean
      */
-    public static boolean isEquals(String str1, String str2) {
+    public static boolean isEquals(final String str1, final String str2) {
         return TextUtils.equals(str1, str2);
     }
 
@@ -59,7 +64,7 @@ public class StringUtils {
      * @param bytes byte数组
      * @return 16进制字符串
      */
-    public static String byte2HexStr(byte[] bytes) {
+    public static String byte2HexStr(final byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {
             sb.append(String.format("%02X", b));
@@ -73,7 +78,7 @@ public class StringUtils {
      * 从下载连接中解析出文件名
      */
     @NonNull
-    public static String getNameFromUrl(String url) {
+    public static String getNameFromUrl(final String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }
 }

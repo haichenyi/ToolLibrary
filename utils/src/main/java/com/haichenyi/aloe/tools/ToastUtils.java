@@ -15,16 +15,17 @@ import com.haichenyi.aloe.BuildConfig;
  * @Version: V1.0
  */
 
-public class ToastUtils {
+public final class ToastUtils {
     private static Toast toast;
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
+
     private ToastUtils() {
         throw new RuntimeException("工具类不允许创建对象");
     }
 
     @SuppressWarnings("all")
-    public static void init(Context context) {
+    public static void init(final Context context) {
         if (toast == null) {
             synchronized (ToastUtils.class) {
                 if (toast == null) {
@@ -35,7 +36,7 @@ public class ToastUtils {
         }
     }
 
-    public static void showTipMsg(String msg) {
+    public static void showTipMsg(final String msg) {
         if (null == toast) {
             init(mContext);
         }
@@ -43,7 +44,7 @@ public class ToastUtils {
         toast.show();
     }
 
-    public static void showTipMsg(@StringRes int msg) {
+    public static void showTipMsg(@StringRes final int msg) {
         if (null == toast) {
             init(mContext);
         }

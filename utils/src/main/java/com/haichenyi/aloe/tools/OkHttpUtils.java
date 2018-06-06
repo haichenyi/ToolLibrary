@@ -56,7 +56,7 @@ public class OkHttpUtils {
      * @param params Map<String, Object>
      * @return Headers
      */
-    private Headers getHeaders(ArrayMap<String, Object> params) {
+    private Headers getHeaders(final ArrayMap<String, Object> params) {
         return new Headers.Builder().add(new Gson().toJson(params)).build();
     }
 
@@ -66,7 +66,7 @@ public class OkHttpUtils {
      * @param bodyParams Map<String, Object>
      * @return RequestBody
      */
-    private RequestBody getRequestBody(ArrayMap<String, Object> bodyParams) {
+    private RequestBody getRequestBody(final ArrayMap<String, Object> bodyParams) {
         okhttp3.FormBody.Builder formEncodingBuilder = new okhttp3.FormBody.Builder();
         if (null != bodyParams) {
             for (Object o : bodyParams.entrySet()) {
@@ -78,7 +78,8 @@ public class OkHttpUtils {
         return formEncodingBuilder.build();
     }
 
-    public void post(String url, ArrayMap<String, Object> headParams, ArrayMap<String, Object> bodyParams, final HttpCallback callback) {
+    public void post(final String url, final ArrayMap<String, Object> headParams,
+                     final ArrayMap<String, Object> bodyParams, final HttpCallback callback) {
         try {
             Headers headers = this.getHeaders(headParams);
             RequestBody body = this.getRequestBody(bodyParams);
@@ -87,6 +88,7 @@ public class OkHttpUtils {
             Request request = (new Request.Builder()).url(url).post(body).headers(headers).build();
             onPostStart(callback);
             this.client.newCall(request).enqueue(new Callback() {
+                @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String result = "";
@@ -101,6 +103,7 @@ public class OkHttpUtils {
                     }
                 }
 
+                @Override
                 public void onFailure(Call call, IOException e) {
                     onPostError(callback, e.getMessage());
                 }
@@ -114,6 +117,7 @@ public class OkHttpUtils {
     private void onPostStart(final HttpCallback callback) {
         if (null != callback) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     callback.onStart();
                 }
@@ -124,6 +128,7 @@ public class OkHttpUtils {
     private void onPostSuccess(final HttpCallback callback, final String data) {
         if (null != callback) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     callback.onSuccess(data);
                 }
@@ -134,6 +139,7 @@ public class OkHttpUtils {
     private void onPostError(final HttpCallback callback, final String msg) {
         if (null != callback) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     callback.onError(msg);
                 }
@@ -151,7 +157,9 @@ public class OkHttpUtils {
      */
     public void downLoad(final String url, final String dirPath, final String fileName,
                          final DownloadListener listener) {
-        if (StringUtils.isEmpty(url)) return;
+        if (StringUtils.isEmpty(url)) {
+            return;
+        }
         Request request = new Request.Builder().url(url).build();
         this.client.newCall(request).enqueue(new Callback() {
             @Override
@@ -164,7 +172,7 @@ public class OkHttpUtils {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 InputStream is = null;
                 byte[] buf = new byte[2048];
-                int len = 0;
+                int len;
                 FileOutputStream fos = null;
                 long current = 0;
                 long total;
@@ -185,6 +193,8 @@ public class OkHttpUtils {
                     } else {
                         file = FileUtils.createNewFile(dirPath, fileName);
                     }
+                    //断言为真，如果断言为false，则会抛出一个AssertionError对象。这个AssertionError继承于Error对象
+                    assert file != null;
                     fos = new FileOutputStream(file);
                     while ((len = is.read(buf)) != -1) {
                         current += len;
@@ -200,12 +210,16 @@ public class OkHttpUtils {
                     onDownLoadFailed(listener, e);
                 } finally {
                     try {
-                        if (is != null) is.close();
+                        if (is != null) {
+                            is.close();
+                        }
                     } catch (IOException e) {
                         LogUtils.i(LogUtils.TAG_Wz, e.getMessage());
                     }
                     try {
-                        if (fos != null) fos.close();
+                        if (fos != null) {
+                            fos.close();
+                        }
                     } catch (IOException e) {
                         LogUtils.i(LogUtils.TAG_Wz, e.getMessage());
                     }
@@ -217,6 +231,7 @@ public class OkHttpUtils {
     private void onDownLoadFailed(final DownloadListener listener, final Exception e) {
         if (null != listener) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     listener.onFailed(e);
                 }
@@ -227,6 +242,7 @@ public class OkHttpUtils {
     private void onDownLoadSuccess(final DownloadListener listener, final String filePath) {
         if (null != listener) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     listener.onSuccess(filePath);
                 }
@@ -234,10 +250,11 @@ public class OkHttpUtils {
         }
     }
 
-    private void onDownLoadProgress(final DownloadListener listener, final long current, final long total,
-                                    final int progress) {
+    private void onDownLoadProgress(final DownloadListener listener, final long current,
+                                    final long total, final int progress) {
         if (null != listener) {
             this.handler.post(new Runnable() {
+                @Override
                 public void run() {
                     listener.onProgress(current, total, progress);
                 }

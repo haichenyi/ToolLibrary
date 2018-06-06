@@ -97,7 +97,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             mContext.startActivity(intent);
         }
         //延时2秒杀死进程
-//        SystemClock.sleep(2000);
+        // SystemClock.sleep(2000);
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 

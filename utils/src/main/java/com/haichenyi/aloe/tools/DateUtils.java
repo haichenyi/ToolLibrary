@@ -10,7 +10,11 @@ import android.text.format.DateFormat;
  * @Date: 2018/5/18
  * @Version: V1.0
  */
-public class DateUtils {
+public final class DateUtils {
+    private DateUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 格式化时间
      * <p>
@@ -26,7 +30,7 @@ public class DateUtils {
      * @param date   long类型的时间（System.currentTimeMillis()）
      * @return 格式后的字符串
      */
-    public static String getDate(String format, long date) {
+    public static String getDate(final String format, final long date) {
         return (String) DateFormat.format(format, date);
     }
 
@@ -36,7 +40,7 @@ public class DateUtils {
      * @param context context
      * @return boolean
      */
-    public static boolean is24HourFormat(Context context) {
+    public static boolean is24HourFormat(final Context context) {
         return DateFormat.is24HourFormat(context);
     }
 }

@@ -9,7 +9,12 @@ import java.util.Arrays;
  * @Date: 2018/5/18
  * @Version: V1.0
  */
-public class ByteUtils {
+public final class ByteUtils {
+
+    private ByteUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * byte数组合并.
      *
@@ -17,7 +22,7 @@ public class ByteUtils {
      * @param other 其它数组
      * @return 合并后的数据
      */
-    public static byte[] concatAll(byte[] first, byte[]... other) {
+    public static byte[] concatAll(final byte[] first, final byte[]... other) {
         int totalLength = first.length;
         for (byte[] ts : other) {
             totalLength += ts.length;
@@ -39,7 +44,7 @@ public class ByteUtils {
      * @param length 复制的长度
      * @return 复制后的数组
      */
-    public static byte[] copyBytes(byte[] data, int index, int length) {
+    public static byte[] copyBytes(final byte[] data, final int index, final int length) {
         byte[] bytes = new byte[length];
         System.arraycopy(data, index, bytes, 0, length);
         return bytes;

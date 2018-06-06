@@ -18,7 +18,11 @@ import java.net.URL;
  * @Date: 2018/5/23
  * @Version: V1.0
  */
-public class MemorySpaceUtils {
+public final class MemorySpaceUtils {
+    private MemorySpaceUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 获取网络文件的大小（需要新开线程）.
      *
@@ -26,7 +30,7 @@ public class MemorySpaceUtils {
      * @return -1 未查询到或者超出Integer最大值
      * @throws IOException IOException
      */
-    public static int FileSize(String url) throws IOException {
+    public static int FileSize(final String url) throws IOException {
         URL url1 = new URL(url);
         // 创建连接
         final HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
@@ -109,7 +113,7 @@ public class MemorySpaceUtils {
      * @return long
      */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static long getPathMemorySize(String filePath) {
+    public static long getPathMemorySize(final String filePath) {
         StatFs statFs = new StatFs(filePath);
         long availableBlocksLong = statFs.getAvailableBlocksLong();
         long blockSizeLong = statFs.getBlockSizeLong();
@@ -123,7 +127,7 @@ public class MemorySpaceUtils {
      * @return long
      */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static long getFileMemorySize(File file) {
+    public static long getFileMemorySize(final File file) {
         return getPathMemorySize(file.getPath());
     }
 }

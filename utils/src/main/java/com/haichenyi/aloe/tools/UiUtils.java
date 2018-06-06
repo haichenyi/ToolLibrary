@@ -26,7 +26,12 @@ import com.haichenyi.aloe.impl.RecycleViewDivider;
  * @Date: 2018/5/30
  * @Version: V1.0
  */
-public class UiUtils {
+public final class UiUtils {
+
+    private UiUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 底部上滑的dialog
      *
@@ -36,8 +41,8 @@ public class UiUtils {
      * @param listener 回调监听
      * @param <T>      泛型
      */
-    public static <T> void showBottomDialog(Context context, RecycleViewDivider divider,
-                                            BaseQuickAdapter<T, BaseViewHolder> adapter,
+    public static <T> void showBottomDialog(final Context context, final RecycleViewDivider divider,
+                                            final BaseQuickAdapter<T, BaseViewHolder> adapter,
                                             final BottomClickListener listener) {
         final BottomSheetDialog dialog = new BottomSheetDialog(context);
         RecyclerView recyclerView = new RecyclerView(context);
@@ -49,14 +54,18 @@ public class UiUtils {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 dialog.dismiss();
-                if (null != listener) listener.onItemClickListener(adapter, view, position);
+                if (null != listener) {
+                    listener.onItemClickListener(adapter, view, position);
+                }
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 dialog.dismiss();
-                if (null != listener) listener.onItemChildClickListener(adapter, view, position);
+                if (null != listener) {
+                    listener.onItemChildClickListener(adapter, view, position);
+                }
             }
         });
         recyclerView.setAdapter(adapter);
@@ -72,7 +81,8 @@ public class UiUtils {
      * @param widthF  宽度float
      * @param heightF 高度float
      */
-    public static void setDialogParams(AlertDialog dialog, float widthF, float heightF) {
+    public static void setDialogParams(final AlertDialog dialog, final float widthF,
+                                       final float heightF) {
         Window window = dialog.getWindow();
         if (null != window) {
             int width = dialog.getContext().getResources().getDisplayMetrics().widthPixels;
@@ -91,7 +101,7 @@ public class UiUtils {
      * @param popupWindow popupWindow
      * @param activity    popupWindow所在的activity
      */
-    public static void setPopupParams(PopupWindow popupWindow, Activity activity) {
+    public static void setPopupParams(final PopupWindow popupWindow, final Activity activity) {
         final Window window = activity.getWindow();
         final WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = 0.5F;

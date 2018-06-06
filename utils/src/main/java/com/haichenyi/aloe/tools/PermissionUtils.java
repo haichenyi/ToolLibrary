@@ -33,7 +33,12 @@ import io.reactivex.functions.Consumer;
  * @Date: 2018/5/17
  * @Version: V1.0
  */
-public class PermissionUtils {
+public final class PermissionUtils {
+
+    private PermissionUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 请求权限的封装.
      *
@@ -41,8 +46,8 @@ public class PermissionUtils {
      * @param listener    listener
      * @param permissions 需要请求的权限名称
      */
-    public static void requestPermission(Activity activity, final PermissionListener listener,
-                                         String... permissions) {
+    public static void requestPermission(final Activity activity, final PermissionListener listener,
+                                         final String... permissions) {
         new RxPermissions(activity).request(permissions).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {
@@ -61,8 +66,8 @@ public class PermissionUtils {
      * @param msg            给这个权限的理由
      * @param listener       diaolog消失的回调方法
      */
-    public static void setupPermission(final AppCompatActivity activity, String permissionName, String msg,
-                                       final OnDismissListener listener) {
+    public static void setupPermission(final AppCompatActivity activity, final String permissionName,
+                                       final String msg, final OnDismissListener listener) {
 
         new AlertDialog.Builder(activity, R.style.Theme_AppCompat_Dialog).setTitle("权限申请")
                 .setMessage(String.format(Locale.getDefault(), "请在“权限”中开启“%1s权限”，以正常使用%2s", permissionName, msg))
@@ -87,7 +92,7 @@ public class PermissionUtils {
      *
      * @param activity activity
      */
-    public static void setPermissionsSetting(Activity activity) {
+    public static void setPermissionsSetting(final Activity activity) {
         if (isMiUi()) {
             try {
                 // MIUI 8

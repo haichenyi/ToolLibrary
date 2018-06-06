@@ -20,7 +20,12 @@ import java.util.regex.Pattern;
  * @Date: 2018/5/18
  * @Version: V1.0
  */
-public class ToolsUtils {
+public final class ToolsUtils {
+
+    private ToolsUtils() {
+        throw new RuntimeException("工具类不允许创建对象");
+    }
+
     /**
      * 通过资源名称获取资源ID.
      *
@@ -29,7 +34,7 @@ public class ToolsUtils {
      * @param resourceName 资源名称
      * @return 资源ID
      */
-    public static int getResourceId(Context context, String defType, String resourceName) {
+    public static int getResourceId(final Context context, final String defType, final String resourceName) {
         return context.getResources().getIdentifier(resourceName, defType, context.getPackageName());
     }
 
@@ -40,7 +45,7 @@ public class ToolsUtils {
      * @param regular 正则表达式：判断是否是手机号："^(1(3|5|8)\\d{9})|(14(5|7)\\d{8})|(17([^2|4|9)])\\d{8})$"
      * @return true是满足, false不满足
      */
-    public static boolean isRegular(String number, String regular) {
+    public static boolean isRegular(final String number, final String regular) {
         Pattern p = Pattern.compile(regular);
         Matcher m = p.matcher(number);
         return m.matches();
@@ -56,14 +61,14 @@ public class ToolsUtils {
      *              其它请看{@link TypedValue#applyDimension(int, float, DisplayMetrics)}
      * @return 具体长度数值
      */
-    public static float digitValue(float value, int unit) {
+    public static float digitValue(final float value, final int unit) {
         return TypedValue.applyDimension(unit, value, Resources.getSystem().getDisplayMetrics());
     }
 
     /**
      * 打开设置界面.
      */
-    public static void startSetting(Activity activity) {
+    public static void startSetting(final Activity activity) {
         PermissionUtils.setPermissionsSetting(activity);
     }
 
@@ -74,7 +79,7 @@ public class ToolsUtils {
      * @param num    小数点后面保留几位
      * @return 截取后的数
      */
-    public static Float getFloat(Float aFloat, int num) {
+    public static Float getFloat(final Float aFloat, final int num) {
 
         return new BigDecimal(aFloat).setScale(num, BigDecimal.ROUND_HALF_UP).floatValue();
     }
@@ -85,7 +90,7 @@ public class ToolsUtils {
      * @param context  context
      * @param filePath app存储路径
      */
-    public static void startInstall(Context context, String filePath) {
+    public static void startInstall(final Context context, final String filePath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(new File(filePath)),
                 "application/vnd.android.package-archive");
@@ -102,7 +107,7 @@ public class ToolsUtils {
      *                 {@link Intent#ACTION_DIAL}
      * @param phoneNum 电话号码
      */
-    public static void callPhone(Context context, String type, String phoneNum) {
+    public static void callPhone(final Context context, final String type, final String phoneNum) {
         Intent intent = new Intent(type);
         Uri data = Uri.parse("tel:" + phoneNum);
         intent.setData(data);
