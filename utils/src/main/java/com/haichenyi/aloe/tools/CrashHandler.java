@@ -5,12 +5,21 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
+import android.text.format.DateFormat;
+import android.util.ArrayMap;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Date;
 
 /**
  * @Title: CrashHandler
@@ -21,31 +30,89 @@ import java.io.PrintWriter;
  * @Version: V1.0
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
-    //文件名
-    private static final String FILE_NAME = "crash";
-    //文件名后缀
-    private static final String FILE_NAME_SUFFIX = ".trace";
-    //上下文
+    /**
+     * 文件名:FILE_NAME+FILE_NAME_TIME+FILE_NAME_SUFFIX
+     */
+    public static final String FILE_NAME = "crash";
+
+    /**
+     * 文件名称中间的时间格式
+     */
+    public static final String FILE_NAME_TIME = "yyyy-MM-dd";
+    /**
+     * 文件名后缀
+     */
+    public static final String FILE_NAME_SUFFIX = ".trace";
+    /**
+     * 一条crash结束的标记
+     */
+    public static final String CRASH_END_FLAG = "************************************************************";
+    /**
+     * 上下文
+     */
     private Context mContext;
 
     private static CrashHandler instance;
 
-    private String FOLDER_PATH = "";
-    private String FOLDER_NAME = "crash";
+    private String folderPath = "";
+    private String folderName = "crash";
+    /**
+     * 奔溃是否需要重启
+     */
     private boolean isRestart = false;
     private Intent intent;
 
+    /**
+     * 崩溃重启
+     *
+     * @param restart 是否需要重启
+     * @param intent  需要启动的intent
+     * @return this
+     */
     public CrashHandler setRestartApp(boolean restart, Intent intent) {
         isRestart = restart;
         this.intent = intent;
         return this;
     }
 
+    /**
+     * 是否需要删除遥远的日志，要在init之后调用
+     *
+     * @param deleteDistant 是否需要删除
+     * @param day           只保留的天数，大于这个天数的都删除
+     * @return boolean
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public boolean setDeleteDistant(boolean deleteDistant, int day) {
+        return deleteDistant && deleteCrashFile(day);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private boolean deleteCrashFile(int day) {
+        String path = folderPath + File.separator + folderName;
+        if (FileUtils.isExit(path)) {
+            File file = new File(path);
+            //按照创建的时间顺序排序的，所以，每次只用删除前面的就可以了
+            if (file.isDirectory() && file.listFiles().length > day) {
+                for (int i = 0; i < file.listFiles().length - day; i++) {
+                    boolean delete = file.listFiles()[i].delete();
+                    if (!delete) {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     private CrashHandler() {
     }
 
     public static CrashHandler getInstance() {
-
         if (null == instance) {
             instance = new CrashHandler();
         }
@@ -63,12 +130,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = context.getApplicationContext();
         if (StringUtils.isEmpty(folderPath)) {
-            FOLDER_PATH = context.getFilesDir().getAbsolutePath();
+            this.folderPath = context.getFilesDir().getAbsolutePath();
         } else {
-            FOLDER_PATH = folderPath;
+            this.folderPath = folderPath;
         }
         if (!StringUtils.isEmpty(folderPath)) {
-            FOLDER_NAME = folderName;
+            this.folderName = folderName;
         }
         return this;
     }
@@ -76,7 +143,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public CrashHandler init(Context context) {
         Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = context.getApplicationContext();
-        FOLDER_PATH = context.getFilesDir().getAbsolutePath();
+        folderPath = context.getFilesDir().getAbsolutePath();
         return this;
     }
 
@@ -93,11 +160,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             dumpExceptionToSDCard(ex);
         }
         if (isRestart && intent != null) {
-            LogUtils.i(LogUtils.TAG_Wz, "重新启动");
+            //重新启动
             mContext.startActivity(intent);
         }
-        //延时2秒杀死进程
-        // SystemClock.sleep(2000);
+        //杀死进程
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
@@ -109,34 +175,143 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private void dumpExceptionToSDCard(Throwable ex) {
         // 储存下载文件的目录
-        String savePath = FileUtils.createFileDirs(FOLDER_PATH, FOLDER_NAME).getAbsolutePath();
+        String savePath = FileUtils.createFileDirs(folderPath, folderName).getAbsolutePath();
         try {
             //以当前时间创建log文件
-            File file = FileUtils.createFile(savePath, FILE_NAME + DateUtils.getDate("yyyy-MM-dd", System.currentTimeMillis()) + FILE_NAME_SUFFIX);
+            String fileLogName = FILE_NAME + DateUtils.getDate(FILE_NAME_TIME, System.currentTimeMillis()) + FILE_NAME_SUFFIX;
+            String contentBefore = "";
+            //之前有文件
+            if (FileUtils.isNoEmpty(savePath, fileLogName)) {
+                contentBefore = FileUtils.readFile(savePath + File.separator + fileLogName)
+                        .replace("\t", "\n\t");
+            }
+            File file = FileUtils.createNewFile(savePath, fileLogName);
             String temp = "temp.txt";
             File fileTemp = FileUtils.createNewFile(savePath, temp);
+            if (null == fileTemp) {
+                return;
+            }
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(fileTemp)));
             //导出手机信息和异常信息
             PackageInfo pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES);
-            FileUtils.writeFileAppend(file, "发生异常时间：" + DateUtils.getDate("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + "\t\n");
-            FileUtils.writeFileAppend(file, "应用版本：" + pi.versionName + "\t\n");
-            FileUtils.writeFileAppend(file, "应用版本号：" + pi.versionCode + "\t\n");
-            FileUtils.writeFileAppend(file, "android版本号：" + Build.VERSION.RELEASE + "\t\n");
-            FileUtils.writeFileAppend(file, "android版本号API：" + Build.VERSION.SDK_INT + "\t\n");
-            FileUtils.writeFileAppend(file, "手机制造商:" + Build.MANUFACTURER + "\t\n");
-            FileUtils.writeFileAppend(file, "手机型号：" + Build.MODEL + "\t\n");
-            ex.printStackTrace(pw);
-            ex.printStackTrace();
-            //关闭输出流
-            pw.close();
-            FileUtils.writeFileAppend(file, "异常：" + FileUtils.readFile(fileTemp.getAbsolutePath())
-                    .replace("\t", "\n\t")
-                    .replace("Caused by", "\n\tCaused by") + "\t\n");
-            FileUtils.writeFileAppend(file, "************************************************************\t\n");
-            fileTemp.delete();
-            LogUtils.i(LogUtils.TAG_Wz, FileUtils.readFile(file.getAbsolutePath()));
+            BufferedWriter bw = null;
+            try {
+                if (null == file) {
+                    return;
+                }
+                bw = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(file, true)));
+                bw.write("发生异常时间：" + DateUtils.getDate("yyyy-MM-dd HH:mm:ss", System.currentTimeMillis()) + "\t\n");
+                bw.write("应用版本：" + pi.versionName + "\t\n");
+                bw.write("应用版本号：" + pi.versionCode + "\t\n");
+                bw.write("android版本号：" + Build.VERSION.RELEASE + "\t\n");
+                bw.write("android版本号API：" + Build.VERSION.SDK_INT + "\t\n");
+                bw.write("手机制造商:" + Build.MANUFACTURER + "\t\n");
+                bw.write("手机型号：" + Build.MODEL + "\t\n");
+                ex.printStackTrace(pw);
+                ex.printStackTrace();
+                //关闭输出流
+                pw.close();
+                bw.write("异常：" + FileUtils.readFile(fileTemp.getAbsolutePath())
+                        .replace("\t", "\n\t")
+                        .replace("Caused by", "\n\tCaused by") + "\t\n");
+                bw.write(CRASH_END_FLAG + "\t\n");
+                bw.write(contentBefore);
+                fileTemp.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bw != null) {
+                        bw.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取crash文件的map
+     *
+     * @param path crash的文件夹目录
+     * @return map：以时间为key，时间格式：{@link CrashHandler#FILE_NAME_TIME}
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private ArrayMap<String, File> getFileMap(String path) {
+        ArrayMap<String, File> mapFile = new ArrayMap<>();
+        if (FileUtils.isExit(path)) {
+            File file = new File(path);
+            if (file.isDirectory() && file.listFiles().length > 0) {
+                for (File file1 : file.listFiles()) {
+                    String time = file1.getName().substring(CrashHandler.FILE_NAME.length(),
+                            file1.getName().indexOf(CrashHandler.FILE_NAME_SUFFIX.charAt(0)));
+                    mapFile.put(time, file1);
+                }
+            }
+        }
+        return mapFile;
+    }
+
+    /**
+     * 读crash文件
+     *
+     * @param file    需要读的文件
+     * @param endFlag 一条crash结束的标记{@link CrashHandler#CRASH_END_FLAG}
+     * @param max     最大读多少条
+     * @return String
+     */
+    private synchronized String readCrashFile(File file, String endFlag, int max) {
+        int num = 0;
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            br = new BufferedReader(new FileReader(file));
+            String result;
+            while ((result = br.readLine()) != null) {
+                sb.append(result);
+                if (result.contains(endFlag)) {
+                    num++;
+                    if (num == max) {
+                        break;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString().replace("\t", "\n\t");
+    }
+
+    /**
+     * 读某一天的crash文件
+     *
+     * @param date 时间，格式{@link CrashHandler#FILE_NAME_TIME}
+     * @param max  crash条数
+     * @return String
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public synchronized String readCrashFile(String date, int max) {
+        String path = folderPath + File.separator + folderName;
+        ArrayMap<String, File> fileMap = getFileMap(path);
+        File file = fileMap.get(date);
+        if (file != null && file.exists()) {
+            return readCrashFile(file, CrashHandler.CRASH_END_FLAG, max);
+        } else {
+            return "";
         }
     }
 }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.ArrayMap;
 
+import com.haichenyi.aloe.tools.CrashHandler;
 import com.haichenyi.aloe.tools.DateUtils;
 import com.haichenyi.aloe.tools.FileUtils;
 import com.haichenyi.aloe.tools.GlideUtils;
@@ -18,6 +19,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * @Title:
+ * @Description:
+ * @Author: wz
+ * @Date: 2018/6/7
+ * @Version: V1.0
+ */
 public class MyApplication extends Application {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -27,29 +35,18 @@ public class MyApplication extends Application {
         ToastUtils.init(this);
         GlideUtils.init(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round);
         initCrash();
-        String path = getFilesDir().getAbsolutePath() + File.separator + "log_crash";
-        ArrayMap<String, File> fileMap = getFileMap(path);
-        File file = fileMap.get(DateUtils.getDate(CrashHandler.FILE_NAME_TIME, System.currentTimeMillis()));
-        String s = readCrashFile(file, CrashHandler.CRASH_END_FLAG, 10);
-        LogUtils.i(LogUtils.TAG_Wz, s);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void initCrash() {
-        String path = getFilesDir().getAbsolutePath() + File.separator + "log_crash";
-        if (FileUtils.isExit(path)) {
-            File file = new File(path);
-            //按照创建的时间顺序排序的，所以，每次只用删除第一个就可以了
-            if (file.isDirectory() && file.listFiles().length > 10) {
-                for (int i = 0; i < file.listFiles().length - 10; i++) {
-                    file.listFiles()[i].delete();
-                }
-            }
-        }
-
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_NEW_TASK);
-        CrashHandler.getInstance().init(this).setRestartApp(true, intent);
+        CrashHandler.getInstance().init(this).setRestartApp(true, intent)
+                .setDeleteDistant(true, 10);
+        LogUtils.i(LogUtils.TAG_Wz,CrashHandler.getInstance().readCrashFile(DateUtils.getDate(CrashHandler.FILE_NAME_TIME, System.currentTimeMillis()),10));
+        LogUtils.i(LogUtils.TAG_Wz,CrashHandler.getInstance().readCrashFile("2018-06-80",10));
+        LogUtils.i(LogUtils.TAG_Wz,CrashHandler.getInstance().readCrashFile("2018-06-15",10));
     }
 
     /**
@@ -88,7 +85,7 @@ public class MyApplication extends Application {
         StringBuilder sb = new StringBuilder();
         try {
             br = new BufferedReader(new FileReader(file));
-            String result = "";
+            String result;
             while ((result = br.readLine()) != null) {
                 sb.append(result);
                 if (result.contains(endFlag)) {

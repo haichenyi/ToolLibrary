@@ -1,11 +1,10 @@
 package com.haichenyi.aloe.tools;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
-import com.haichenyi.aloe.Interface.HttpsListener;
+import com.haichenyi.aloe.interfaces.HttpsListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;

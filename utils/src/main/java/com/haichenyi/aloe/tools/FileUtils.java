@@ -1,6 +1,9 @@
 package com.haichenyi.aloe.tools;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.util.ArrayMap;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -318,18 +321,18 @@ public final class FileUtils {
      * @param zipFile   需要解压的zip文件路径
      * @param targetDir 需要解压到的目标文件夹
      */
-    public static void Unzip(final String zipFile, final String targetDir) {
+    public static void UnZip(final String zipFile, final String targetDir) {
         try {
             FileInputStream fis = new FileInputStream(zipFile);
-            Unzip(fis, targetDir);
+            UnZip(fis, targetDir);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void Unzip(final InputStream inputStream, final String targetDir) {
+    public static void UnZip(final InputStream inputStream, final String targetDir) {
         //这里缓冲区我们使用4KB
-        int BUFFER = 4096;
+        int Buffer = 4096;
         String strEntry; //保存每个zip的条目名称
         try {
             //缓冲输出流
@@ -339,7 +342,7 @@ public final class FileUtils {
             while ((entry = zis.getNextEntry()) != null) {
                 try {
                     int count;
-                    byte data[] = new byte[BUFFER];
+                    byte[] data = new byte[Buffer];
                     strEntry = entry.getName();
                     File entryFile = new File(targetDir + File.separator + strEntry);
                     if (entryFile.isFile() && !entryFile.exists()) {
@@ -350,8 +353,8 @@ public final class FileUtils {
                         entryDir.mkdirs();
                     }
                     FileOutputStream fos = new FileOutputStream(entryFile);
-                    dest = new BufferedOutputStream(fos, BUFFER);
-                    while ((count = zis.read(data, 0, BUFFER)) != -1) {
+                    dest = new BufferedOutputStream(fos, Buffer);
+                    while ((count = zis.read(data, 0, Buffer)) != -1) {
                         dest.write(data, 0, count);
                     }
                     dest.flush();
@@ -394,7 +397,7 @@ public final class FileUtils {
                 copyFileDirs(currentFile.getPath() + File.separator, toFile + currentFile.getName() + File.separator);
             } else {
                 //如果当前项为文件则进行文件拷贝
-                CopySdcardFile(currentFile.getPath(), toFile + currentFile.getName());
+                CopySdCardFile(currentFile.getPath(), toFile + currentFile.getName());
             }
         }
         return 0;
@@ -407,11 +410,11 @@ public final class FileUtils {
      * @param toFile   目标文件（带文件名称）
      * @return int 0：正常 -1：异常
      */
-    public static int CopySdcardFile(final String fromFile, final String toFile) {
+    public static int CopySdCardFile(final String fromFile, final String toFile) {
         try {
             InputStream inputStream = new FileInputStream(fromFile);
             OutputStream outputStream = new FileOutputStream(toFile);
-            byte bt[] = new byte[1024];
+            byte[] bt = new byte[1024];
             int c;
             while ((c = inputStream.read(bt)) > 0) {
                 outputStream.write(bt, 0, c);

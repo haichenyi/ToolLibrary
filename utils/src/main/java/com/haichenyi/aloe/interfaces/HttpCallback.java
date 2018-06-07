@@ -1,4 +1,4 @@
-package com.haichenyi.aloe.Interface;
+package com.haichenyi.aloe.interfaces;
 
 /**
  * @Title: HttpCallback
@@ -8,9 +8,22 @@ package com.haichenyi.aloe.Interface;
  * @Version: V1.0
  */
 public interface HttpCallback {
+    /**
+     * 开始请求
+     */
     void onStart();
 
+    /**
+     * 请求成功
+     *
+     * @param success success
+     */
     void onSuccess(String success);
 
+    /**
+     * 请求失败
+     *
+     * @param failed failed
+     */
     void onError(String failed);
 }

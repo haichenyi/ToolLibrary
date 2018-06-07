@@ -13,7 +13,7 @@ import android.widget.PopupWindow;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.haichenyi.aloe.Interface.BottomClickListener;
+import com.haichenyi.aloe.interfaces.BottomClickListener;
 import com.haichenyi.aloe.impl.RecycleViewDivider;
 
 /**

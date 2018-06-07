@@ -11,8 +11,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
-import com.haichenyi.aloe.Interface.OnDismissListener;
-import com.haichenyi.aloe.Interface.PermissionListener;
+import com.haichenyi.aloe.interfaces.OnDismissListener;
+import com.haichenyi.aloe.interfaces.PermissionListener;
 import com.haichenyi.aloe.R;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 

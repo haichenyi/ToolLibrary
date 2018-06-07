@@ -31,7 +31,7 @@ public final class DateUtils {
      * @return 格式后的字符串
      */
     public static String getDate(final String format, final long date) {
-        return (String) DateFormat.format(format, date);
+        return DateFormat.format(format, date).toString();
     }
 
     /**

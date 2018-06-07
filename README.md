@@ -96,5 +96,14 @@ ToastUtils.init(this);
 ### 16、UiUtils Ui工具类
 
     内部包含多个方法，如：设置dialog的宽高，设置popup的背景颜色等等
-    
+
+### 17、CrashHandler 异常工具类
+
+    crash工具类，监听程序异常，
+```
+    1、可设置异常重启setRestartApp()
+    2、可设置保留几天的日志，或者都保留setDeleteDistant()
+    3、可按照时间读日志文件，并且可设置读多少条readCrashFile()
+```
+
 ***PS：以上类中方法的调用方式，demo里面都有示例。***

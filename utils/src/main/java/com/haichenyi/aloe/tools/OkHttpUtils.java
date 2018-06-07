@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
 import com.google.gson.Gson;
-import com.haichenyi.aloe.Interface.DownloadListener;
-import com.haichenyi.aloe.Interface.HttpCallback;
+import com.haichenyi.aloe.interfaces.DownloadListener;
+import com.haichenyi.aloe.interfaces.HttpCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;

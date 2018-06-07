@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
@@ -13,26 +12,20 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.text.format.Formatter;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.haichenyi.aloe.Interface.BottomClickListener;
-import com.haichenyi.aloe.Interface.DownloadListener;
-import com.haichenyi.aloe.Interface.HttpCallback;
-import com.haichenyi.aloe.Interface.HttpsListener;
-import com.haichenyi.aloe.Interface.OnDismissListener;
-import com.haichenyi.aloe.Interface.PermissionListener;
-import com.haichenyi.aloe.impl.BottomListener;
+import com.haichenyi.aloe.interfaces.DownloadListener;
+import com.haichenyi.aloe.interfaces.HttpCallback;
+import com.haichenyi.aloe.interfaces.HttpsListener;
+import com.haichenyi.aloe.interfaces.OnDismissListener;
+import com.haichenyi.aloe.interfaces.PermissionListener;
+import com.haichenyi.aloe.impl.AbstractBottomListener;
 import com.haichenyi.aloe.impl.RecycleViewDivider;
-import com.haichenyi.aloe.tools.CrashHandler;
 import com.haichenyi.aloe.tools.FileUtils;
-import com.haichenyi.aloe.tools.GlideUtils;
 import com.haichenyi.aloe.tools.LogUtils;
 import com.haichenyi.aloe.tools.MemorySpaceUtils;
 import com.haichenyi.aloe.tools.NetworkUtils;
@@ -62,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         LogUtils.i("wz", "打印日志i");
         LogUtils.e("wz", "打印日志e");
         String name = "123rewf fdfdasf fdsfdsvc bvcbvc qwe";
-        LogUtils.i(LogUtils.TAG_Wz,name);
-        name.replace(" ",";");
-        LogUtils.i(LogUtils.TAG_Wz,name);
+        LogUtils.i(LogUtils.TAG_Wz, name);
+        String replace = name.replace(" ", ";");
+        LogUtils.i(LogUtils.TAG_Wz, replace);
         //1、必须要有activity
         new Activity().runOnUiThread(new Runnable() {
             @Override
@@ -217,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 File ule = FileUtils.createFileDirs(getCacheDir().getAbsolutePath(), "ule");
                                 File newFile = FileUtils.createNewFile(ule.getAbsolutePath(), "HelloWorld.txt");
+                                assert newFile != null;
                                 FileUtils.writeFile(newFile.getAbsolutePath(), "this is a text!");
                                 String s = FileUtils.readFile(newFile.getAbsolutePath());
                                 LogUtils.i(LogUtils.TAG_Wz, "写入的消息为：" + s);
@@ -271,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                                 LogUtils.i(LogUtils.TAG_Wz, inputStream != null);
                                 if (inputStream != null) {
                                     File file = FileUtils.createFileDirs(path, name);
-                                    FileUtils.Unzip(inputStream, file.getAbsolutePath());
+                                    FileUtils.UnZip(inputStream, file.getAbsolutePath());
                                 } else {
 
                                 }
@@ -299,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 RecycleViewDivider divider = new RecycleViewDivider(MainActivity.this, LinearLayoutManager.HORIZONTAL, 1, Color.BLACK);
-                UiUtils.showBottomDialog(MainActivity.this, divider, adapter, new BottomListener() {
+                UiUtils.showBottomDialog(MainActivity.this, divider, adapter, new AbstractBottomListener() {
                     @Override
                     public void onItemChildClickListener(BaseQuickAdapter adapter, View view, int position) {
                         switch (view.getId()) {
@@ -309,9 +303,13 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.tv_content_right:
                                 ToastUtils.showTipMsg("第" + position + "栏右边item");
                                 break;
+                            default:
+                                break;
                         }
                     }
                 });
+                break;
+            default:
                 break;
         }
     }

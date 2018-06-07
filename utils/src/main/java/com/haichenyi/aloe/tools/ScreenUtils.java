@@ -24,7 +24,8 @@ public final class ScreenUtils {
     /**
      * 获取屏幕亮度.
      *
-     * @return 0-255之间
+     * @param context context
+     * @return int 0-255之间
      */
     public static int getSystemBrightness(final Context context) {
         int systemBrightness = 0;
@@ -40,7 +41,8 @@ public final class ScreenUtils {
     /**
      * 改变App当前Window亮度.
      *
-     * @param brightness brightness
+     * @param activity   activity
+     * @param brightness 亮度 0-255之间
      */
     public static void changeAppBrightness(final Activity activity, final int brightness) {
         Window window = activity.getWindow();
@@ -54,7 +56,10 @@ public final class ScreenUtils {
     }
 
     /**
-     * 设置当前系统屏幕亮度值  0--255.
+     * 设置当前系统屏幕亮度值.
+     *
+     * @param context  context
+     * @param paramInt 0--255
      */
     public static void saveScreenBrightness(final Context context, final int paramInt) {
         try {
@@ -67,13 +72,15 @@ public final class ScreenUtils {
 
     /**
      * 设置当前屏幕亮度的模式.
-     * SCREEN_BRIGHTNESS_MODE_AUTOMATIC=1 为自动调节屏幕亮度
-     * SCREEN_BRIGHTNESS_MODE_MANUAL=0  为手动调节屏幕亮度
+     *
+     * @param context context
+     * @param type    类型 自动：{@link Settings.System#SCREEN_BRIGHTNESS_MODE_AUTOMATIC}
+     *                手动：{@link Settings.System#SCREEN_BRIGHTNESS_MODE_MANUAL}
      */
-    public static void setScreenMode(final Context context, final int paramInt) {
+    public static void setScreenMode(final Context context, final int type) {
         try {
             Settings.System.putInt(context.getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS_MODE, paramInt);
+                    Settings.System.SCREEN_BRIGHTNESS_MODE, type);
             //保存到系统中
             Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE);
             context.getContentResolver().notifyChange(uri, null);
@@ -83,8 +90,11 @@ public final class ScreenUtils {
     }
 
     /**
-     * 2. SCREEN_BRIGHTNESS_MODE_AUTOMATIC=1 为自动调节屏幕亮度.
-     * 3. SCREEN_BRIGHTNESS_MODE_MANUAL=0  为手动调节屏幕亮度
+     * 获取当前屏幕的亮度模式.
+     *
+     * @param context context
+     * @return int 自动：{@link Settings.System#SCREEN_BRIGHTNESS_MODE_AUTOMATIC} = 1
+     * 手动：{@link Settings.System#SCREEN_BRIGHTNESS_MODE_MANUAL} = 0
      */
     public static int getScreenMode(final Context context) {
         int screenMode = 0;
