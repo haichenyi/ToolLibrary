@@ -2,7 +2,7 @@
 
 ## 依赖方式
 ```
-compile 'com.haichenyi.aloe:utils:1.2.0'
+compile 'com.haichenyi.aloe:utils:1.2.5'
 ```
 
 ## 简介和用法
