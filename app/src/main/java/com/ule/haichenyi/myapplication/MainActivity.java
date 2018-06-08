@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LogUtils.v("wz", "打印日志v");
-        LogUtils.i("wz", "打印日志i");
         LogUtils.e("wz", "打印日志e");
         String name = "123rewf fdfdasf fdsfdsvc bvcbvc qwe";
         LogUtils.i(LogUtils.TAG_Wz, name);
