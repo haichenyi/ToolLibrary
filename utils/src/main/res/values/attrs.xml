@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <declare-styleable name="IndexBar" tools:ignore="ResourceName">
+    <attr name="indexBarTextSize" format="dimension" />
+    <attr name="indexBarPressBackground" format="color" />
+  </declare-styleable>
+</resources>
