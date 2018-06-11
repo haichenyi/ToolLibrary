@@ -106,4 +106,8 @@ ToastUtils.init(this);
     3、可按照时间读日志文件，并且可设置读多少条readCrashFile()
 ```
 
+### 18、SpUtils SharedPreference工具类
+
+    内部包含多个方法，如：存取值方法，连续存放多个值等
+
 ***PS：以上类中方法的调用方式，demo里面都有示例。***
