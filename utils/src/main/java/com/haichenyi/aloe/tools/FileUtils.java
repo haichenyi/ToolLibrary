@@ -1,14 +1,12 @@
 package com.haichenyi.aloe.tools;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.util.ArrayMap;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -425,5 +423,89 @@ public final class FileUtils {
         } catch (Exception ex) {
             return -1;
         }
+    }
+
+    /**
+     * 获得指定文件的byte数组
+     *
+     * @param filePath 文件绝对路径
+     * @return byte[]
+     */
+    public static byte[] file2Byte(String filePath) {
+        ByteArrayOutputStream bos = null;
+        BufferedInputStream in = null;
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                throw new FileNotFoundException("file not exists");
+            }
+            bos = new ByteArrayOutputStream((int) file.length());
+            in = new BufferedInputStream(new FileInputStream(file));
+            int bufSize = 1024;
+            byte[] buffer = new byte[bufSize];
+            int len;
+            while (-1 != (len = in.read(buffer, 0, bufSize))) {
+                bos.write(buffer, 0, len);
+            }
+            return bos.toByteArray();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 根据byte数组，生成文件
+     *
+     * @param bfile    文件数组
+     * @param filePath 文件存放路径
+     * @param fileName 文件名称
+     * @return file
+     */
+    public static File byte2File(byte[] bfile, String filePath, String fileName) {
+        BufferedOutputStream bos = null;
+        FileOutputStream fos = null;
+        File file = null;
+        try {
+            File dir = new File(filePath);
+            //判断文件目录是否存在
+            if (!dir.exists() && !dir.isDirectory()) {
+                dir.mkdirs();
+            }
+            file = new File(filePath + File.separator + fileName);
+            fos = new FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(bfile);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bos != null) {
+                    bos.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        return file;
     }
 }
