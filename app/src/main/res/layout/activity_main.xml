@@ -82,9 +82,5 @@
             android:id="@+id/btn15"
             style="@style/BtnStyle"
             android:text="底部dialog" />
-        <Button
-          android:id="@+id/btn16"
-          style="@style/BtnStyle"
-          android:text="IndexBar" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

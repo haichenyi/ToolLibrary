@@ -29,7 +29,6 @@ import com.haichenyi.aloe.interfaces.PermissionListener;
 import com.haichenyi.aloe.impl.AbstractBottomListener;
 import com.haichenyi.aloe.impl.RecycleViewDivider;
 import com.haichenyi.aloe.tools.FileUtils;
-import com.haichenyi.aloe.tools.IndexBar;
 import com.haichenyi.aloe.tools.LogUtils;
 import com.haichenyi.aloe.tools.MemorySpaceUtils;
 import com.haichenyi.aloe.tools.NetworkUtils;
@@ -312,66 +311,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case R.id.btn16:
-              View view1 = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_indexbar, null);
-              RecyclerView recyclerView1 = view1.findViewById(R.id.recycler_view);
-              IndexBar indexBar = view1.findViewById(R.id.index_bar);
-              indexBar.bindRecyclerView(recyclerView1, null);
-              List<DataBean> dataBeans = getData();
-              BaseQuickAdapter<DataBean, BaseViewHolder> adapter1 = new BaseQuickAdapter<DataBean, BaseViewHolder>(android.R.layout.simple_list_item_1) {
-                @Override
-                protected void convert(BaseViewHolder helper, DataBean item) {
-                  helper.setText(android.R.id.text1, item.name);
-                }
-              };
-              recyclerView1.setAdapter(adapter1);
-              adapter1.setNewData(dataBeans);
-              indexBar.setSourceData(dataBeans).invalidate();
-              new AlertDialog.Builder(view.getContext()).setView(view1).create().show();
-                break;
             default:
                 break;
         }
-    }
-
-    private List<DataBean> getData(){
-      List<DataBean> dataBeans = new ArrayList<>();
-      dataBeans.add(new DataBean("安陆", "A"));
-      dataBeans.add(new DataBean("安庆", "A"));
-      dataBeans.add(new DataBean("安乡", "A"));
-      dataBeans.add(new DataBean("安阳", "A"));
-      dataBeans.add(new DataBean("安义", "A"));
-
-      dataBeans.add(new DataBean("北京", "B"));
-      dataBeans.add(new DataBean("巴东", "B"));
-      dataBeans.add(new DataBean("白城", "B"));
-      dataBeans.add(new DataBean("宝鸡", "B"));
-
-      dataBeans.add(new DataBean("蔡甸", "C"));
-      dataBeans.add(new DataBean("长春", "C"));
-      dataBeans.add(new DataBean("广水", "G"));
-      dataBeans.add(new DataBean("广州", "G"));
-      dataBeans.add(new DataBean("上海", "S"));
-      dataBeans.add(new DataBean("三亚", "S"));
-      return dataBeans;
-    }
-
-    private static class DataBean implements IndexBar.SuspensionHelper {
-      private String name;
-      private String tag;
-
-      private DataBean(String name, String tag) {
-        this.name = name;
-        this.tag = tag;
-      }
-
-      public String getName() {
-        return name;
-      }
-
-      @Override
-      public String getTag() {
-        return tag;
-      }
     }
 }
